@@ -3,10 +3,21 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
+from fastapi.middleware.cors import CORSMiddleware
 
 DATABASE_URL = "sqlite:///./jogos.db"  
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(bind=engine)
+
+origins = "web-production-f551c.up.railway.app"
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,          
+    allow_credentials=True,
+    allow_methods=["*"],           
+    allow_headers=["*"],          
+)
 
 class Base(DeclarativeBase):  
     pass
@@ -98,3 +109,5 @@ def deletar_jogo(id: int, db: Session = Depends(get_db)):
     db.delete(jogo)
     db.commit()
     return None
+
+
