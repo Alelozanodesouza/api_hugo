@@ -9,7 +9,7 @@ DATABASE_URL = "sqlite:///./jogos.db"
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(bind=engine)
 
-origins = "web-production-f551c.up.railway.app"
+origins = "https://web-production-f551c.up.railway.app"
 
 app.add_middleware(
     CORSMiddleware,
