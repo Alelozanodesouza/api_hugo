@@ -1,7 +1,6 @@
 import sqlite3
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 from pydantic import BaseModel
  
 # ── Banco de dados ────────────────────────────────────────────────────────────
@@ -42,17 +41,6 @@ app.add_middleware(
 # ── Auth ──────────────────────────────────────────────────────────────────────
  
 VALID_TOKEN = "550e8400-e29b-41d4-a716-446655440000"
- 
-@app.middleware("http")
-async def auth_middleware(request: Request, call_next):
-    if request.url.path in ("/login", "/docs", "/openapi.json", "/redoc"):
-        return await call_next(request)
- 
-    auth_header = request.headers.get("Authorization", "")
-    if not auth_header.startswith("Bearer ") or auth_header[7:] != VALID_TOKEN:
-        return JSONResponse(status_code=401, content={"detail": "Token inválido ou ausente"})
- 
-    return await call_next(request)
  
 # ── Modelos Pydantic ──────────────────────────────────────────────────────────
  
@@ -127,3 +115,4 @@ def deletar_jogo(id: int):
         conn.execute("DELETE FROM jogos WHERE id = ?", (id,))
         conn.commit()
     return None
+
